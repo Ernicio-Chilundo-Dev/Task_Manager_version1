@@ -5,6 +5,43 @@
 
 using namespace std;
 
+// Estrutura a para reprresentar uma tarefa
+struct Tarefa
+{
+    string descrricao;
+    string prazo;
+    bool concluida;
+};
+
+// Vector para armanezar as tarefas
+vector<Tarefa>tarefas;
+
+// Funcao para salvarTarefa
+void salvarTarefa(){
+    ofstream arquivo("tarefa.txt");
+
+    for(const auto& tarefa:tarefas){
+        cout << tarefa.descrricao<<tarefa.prazo<<tarefa.concluida<<endl;
+    }
+    arquivo.close();
+}
+
+// Funcao para carregar tarefa
+void carregarTarefa(){
+    ifstream arquivo("tarefa.txt");
+    if(!arquivo)return;
+
+    Tarefa tarefa;
+    while (getline(arquivo,tarefa.descrricao))
+    {
+        getline(arquivo,tarefa.descrricao);
+        arquivo>>tarefa.concluida;
+        arquivo.ignore();
+        tarefas.push_back(tarefa);
+    }
+    arquivo.close();
+}
+
 // Funcao principal
 int main()
 {
