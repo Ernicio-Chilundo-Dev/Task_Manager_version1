@@ -21,7 +21,7 @@ void salvarTarefa(){
     ofstream arquivo("tarefa.txt");
 
     for(const auto& tarefa:tarefas){
-        cout << tarefa.descrricao<<tarefa.prazo<<tarefa.concluida<<endl;
+        cout << tarefa.descrricao<<endl<<tarefa.prazo<<endl<<tarefa.concluida<<endl;
     }
     arquivo.close();
 }
@@ -40,6 +40,20 @@ void carregarTarefa(){
         tarefas.push_back(tarefa);
     }
     arquivo.close();
+}
+
+// Funcao para adicionar uma nove tarefa
+void adicionarTarefa(){
+    Tarefa novaTarefa;
+    cin.ignore();
+    cout << "Digite a descricao da tarefa: ";
+    getline(cin,novaTarefa.descrricao);
+    cout << "Digite o prazo da tarefa tarefa: ";
+    getline(cin,novaTarefa.prazo);
+    novaTarefa.concluida = false;
+    tarefas.push_back(novaTarefa);
+    salvarTarefa();
+    cout << "Tarefa adicionada com sucesso!\n";
 }
 
 // Funcao principal
