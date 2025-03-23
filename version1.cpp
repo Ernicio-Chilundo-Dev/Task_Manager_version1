@@ -14,28 +14,34 @@ struct Tarefa
 };
 
 // Vector para armanezar as tarefas
-vector<Tarefa>tarefas;
+vector<Tarefa> tarefas;
 
 // Funcao para salvarTarefa
-void salvarTarefa(){
+void salvarTarefa()
+{
     ofstream arquivo("tarefa.txt");
 
-    for(const auto& tarefa:tarefas){
-        cout << tarefa.descrricao<<endl<<tarefa.prazo<<endl<<tarefa.concluida<<endl;
+    for (const auto &tarefa : tarefas)
+    {
+        cout << tarefa.descrricao << endl
+             << tarefa.prazo << endl
+             << tarefa.concluida << endl;
     }
     arquivo.close();
 }
 
 // Funcao para carregar tarefa
-void carregarTarefa(){
+void carregarTarefa()
+{
     ifstream arquivo("tarefa.txt");
-    if(!arquivo)return;
+    if (!arquivo)
+        return;
 
     Tarefa tarefa;
-    while (getline(arquivo,tarefa.descrricao))
+    while (getline(arquivo, tarefa.descrricao))
     {
-        getline(arquivo,tarefa.descrricao);
-        arquivo>>tarefa.concluida;
+        getline(arquivo, tarefa.descrricao);
+        arquivo >> tarefa.concluida;
         arquivo.ignore();
         tarefas.push_back(tarefa);
     }
@@ -43,17 +49,65 @@ void carregarTarefa(){
 }
 
 // Funcao para adicionar uma nove tarefa
-void adicionarTarefa(){
+void adicionarTarefa()
+{
     Tarefa novaTarefa;
     cin.ignore();
     cout << "Digite a descricao da tarefa: ";
-    getline(cin,novaTarefa.descrricao);
+    getline(cin, novaTarefa.descrricao);
     cout << "Digite o prazo da tarefa tarefa: ";
-    getline(cin,novaTarefa.prazo);
+    getline(cin, novaTarefa.prazo);
     novaTarefa.concluida = false;
     tarefas.push_back(novaTarefa);
     salvarTarefa();
     cout << "Tarefa adicionada com sucesso!\n";
+}
+
+// Funcao para listar uma tarefa
+void listarTarefa()
+{
+    if (tarefas.empty()){
+        cout << "Nenhuma tarefa encontrada\n";
+    }
+    for (size_t i = 0; i < tarefas.size(); i++)
+    {
+        cout << i + 1 << ". [" << (tarefas[i].concluida ? 'C' : 'X') << "] " << tarefas[i].descrricao << " (Prazo: " << tarefas[i].prazo << ")" << endl;
+    }
+}
+
+//Funcao para marcar tarefa concluida
+void marcarTarefa(){
+    listarTarefa();
+    if(tarefas.empty())return;
+    int index;
+    cout << "Digite o numero da tarefa concluida: ";
+    cin >> index;
+
+    if(index > 0 && index <= static_cast <int> (tarefas.size())){
+        tarefas[index - 1].concluida = true;
+        salvarTarefa();
+        cout << "Tarefa marcada como cooncluida\n";
+    }else{
+        cout << "Alternativa nula\n";
+    }
+}
+
+// Funcao para remover uma tarefa
+void removerTarefa(){
+    listarTarefa();
+    if(tarefas.empty())return;
+
+    int index;
+    cout << "Digite o numero da tarefa a excluir: ";
+    cin >> index;
+
+    if(index > 0 && index <= static_cast<int>(tarefas.size())){
+        tarefas.erase(tarefas.begin() + index - 1);
+        salvarTarefa();
+        cout << "Tarefa removida com sucesso\n";
+    }else{
+        cout << "Alternativa nula\n";
+    }
 }
 
 // Funcao principal
@@ -70,6 +124,16 @@ int main()
         cout << "4. Remover Tarefa\n";
         cout << "5. Sair\n";
         cout << "Informe a sua alternsativa: ";
+        cin >> alternativa;
+
+        switch(alternativa){
+            case 1: adicionarTarefa();break;
+            case 2: listarTarefa();break;
+            case 3: marcarTarefa();break;
+            case 4: removerTarefa();break;
+            case 5: cout << "Saindo do progama...\n";break;
+            default: cout << "Alternativa nula\n";
+        }
     } while (alternativa != 5);
     return 0;
 }
